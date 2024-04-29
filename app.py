@@ -16,19 +16,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'top secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['OAUTH2_PROVIDERS'] = {
-    # Google OAuth 2.0 documentation:
-    # https://developers.google.com/identity/protocols/oauth2/web-server#httprest
-    'google': {
-        'client_id': os.environ.get('GOOGLE_CLIENT_ID'),
-        'client_secret': os.environ.get('GOOGLE_CLIENT_SECRET'),
-        'authorize_url': 'https://accounts.google.com/o/oauth2/auth',
-        'token_url': 'https://accounts.google.com/o/oauth2/token',
-        'userinfo': {
-            'url': 'https://www.googleapis.com/oauth2/v3/userinfo',
-            'email': lambda json: json['email'],
-        },
-        'scopes': ['https://www.googleapis.com/auth/userinfo.email'],
-    },
 
     # GitHub OAuth 2.0 documentation:
     # https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
@@ -80,6 +67,7 @@ def oauth2_authorize(provider):
         return redirect(url_for('index'))
 
     provider_data = current_app.config['OAUTH2_PROVIDERS'].get(provider)
+    print(provider_data)
     if provider_data is None:
         abort(404)
 
